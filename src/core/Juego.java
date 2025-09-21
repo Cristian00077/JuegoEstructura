@@ -166,6 +166,7 @@ public class Juego {
             System.out.println("3. Cofre aparece");
             System.out.println("4. Portal mágico");
             System.out.println("5. Trampa");
+            System.out.println("6. Ver inventario");
             System.out.println("0. Volver al menu principal");
 
             int opcion = sc.nextInt();
@@ -196,6 +197,10 @@ public class Juego {
                     break;
                 case 5: 
                     caerEnTrampa();
+                    break;
+                case 6:
+                    System.out.println("Inventario: ");
+                    arbolGemmas.inorden();
                     break;
                 case 0: 
                     continuar = false;
