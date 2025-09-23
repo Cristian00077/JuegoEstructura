@@ -108,15 +108,10 @@ public class Juego {
             switch (opc) {
                 case 4: // Recolectar gema
                     int poder = random.nextInt(100) + 1;
-                    if (poder % 2 == 0) {
-                        String nombre = "Gema " + poder;
-                        int x = random.nextInt(20);
-                        int y = random.nextInt(20);
-                        recolectarGema(poder, nombre, x, y);
-                    } else {
-                        System.out.println("No se encontro ninguna gema, intente de nuevo!!");
-                    }
-
+                    String nombre = "Gema " + poder;
+                    int x = random.nextInt(20);
+                    int y = random.nextInt(20);
+                    recolectarGema(poder, nombre, x, y);
                     break;
 
                 case 2: // Cofre
@@ -137,7 +132,7 @@ public class Juego {
                     break;
 
                 default:
-                    mostrarEvento("Opción inválida. Intente de nuevo.");
+                    mostrarEvento("Opción inválida. Intente de nuevo");
             }
             if (arbolGemmas.minimo() == null && cont > 7) {
                 jugando = false;
@@ -159,6 +154,8 @@ public class Juego {
         boolean continuar = true;
         
         while(continuar){
+            int cont = 0;
+            cont = cont + 1;
             mostrarSeccion("ESCOGER EVENTO");
             System.out.print("Seleccione el evento: \n");
             System.out.println("1. Recolectar gema");
@@ -174,19 +171,16 @@ public class Juego {
             switch(opcion){
                 case 1: 
                     int poder = random.nextInt(100) + 1;
-                        if (poder % 2 == 0) {
-                            String nombre = "Gema " + poder;
-                            int x = random.nextInt(20);
-                            int y = random.nextInt(20);
-                            recolectarGema(poder, nombre, x, y);
-                        }
+                        String nombre = "Gema " + poder;
+                        int x = random.nextInt(20);
+                        int y = random.nextInt(20);
+                        recolectarGema(poder, nombre, x, y);
                         break;
                 case 2: 
                     int poderJefe = random.nextInt(100) + 1;
                     System.out.println("El jefe pide la gema con poder: " + poderJefe);
                     arbolGemmas.inorden();
-                    System.out.print("Inserte el poder de la gema que desea entregar: ");
-                    int poderJugador = sc.nextInt();
+                    int poderJugador = arbolGemmas.getRaiz().getPoder();
                     jefePideGema(poderJefe, poderJugador);
                     break;
                 case 3: 
@@ -209,6 +203,16 @@ public class Juego {
                     mostrarEvento("Opcion inválida.");
                     break;
             }
+            if (arbolGemmas.minimo() == null && cont > 7) {
+                continuar = false;
+            }
+        }
+        mostrarTitulo("FIN DE LA AVENTURA");
+        System.out.println("Estado final del inventario: ");
+        if (arbolGemmas.minimo() != null) {
+            arbolGemmas.inorden();
+        } else {
+            System.out.println("Te has quedado sin gemas");
         }
     }
     
@@ -260,6 +264,7 @@ public class Juego {
     }
 
     private void jefePideGema(int poderRequerido, int poderJugador) {
+        mostrarArte("jefe");
         Scanner sc = new Scanner(System.in);
         mostrarEvento("Un jefe aparece y pide gema de poder " + poderRequerido);
         Nodo gema = arbolGemmas.buscar(poderRequerido);
@@ -294,7 +299,7 @@ public class Juego {
                 mostrarEvento("Entregas la gema más cercana: " + predecesor.getNombre());
                 arbolGemmas.eliminar(predecesor.getPoder());
             } else {
-                // 🔥 Caso nuevo: el jefe quita la gema que intentó entregar el jugador
+               
                 Nodo intento = arbolGemmas.buscar(poderJugador);
                 if (intento != null) {
                     mostrarEvento("El jefe rechaza tu gema... ¡y se queda con ella de todos modos!: " + intento.getNombre());
@@ -331,8 +336,7 @@ public class Juego {
                     System.out.println("La gema que pide el jefe es: " + poderJefe);
                     mostrarSeccion("INVENTARIO");
                     arbolGemmas.inorden();
-                    System.out.print("Inserte el poder de la gema que desea entregar: ");
-                    int poder1 = sc.nextInt();
+                    int poder1 = arbolGemmas.getRaiz().getPoder();
                     jefePideGema(poderJefe, poder1);
                     break;
                 case 3:
@@ -454,11 +458,11 @@ public class Juego {
                 break;
             case "recolecta":
                 System.out.println(
-                        "     ■         \n"
-                        + "                \n"
-                        + "    \\O/        \n"
-                        + "     |         \n"
-                        + "    / \\        \n"
+                          "     ***       \n"
+                        + "      *         \n"        
+                        + "     \\O/        \n"
+                        + "      |         \n"
+                        + "     / \\        \n"
                 );
                 break;
         }
