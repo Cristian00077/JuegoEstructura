@@ -180,9 +180,12 @@ public class Juego {
                     int poderJefe = random.nextInt(100) + 1;
                     System.out.println("El jefe pide la gema con poder: " + poderJefe);
                     arbolGemmas.inorden();
+                    //while(arbolGemmas.getRaiz() != null){
                     int poderJugador = arbolGemmas.getRaiz().getPoder();
                     jefePideGema(poderJefe, poderJugador);
+                    //}
                     break;
+                    
                 case 3: 
                     abrirCofreMenorPoder();
                     break;
