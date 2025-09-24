@@ -4,11 +4,11 @@ import java.util.*;
 
 public class Juego {
 
-    private ArbolBST arbolGemmas;
+    private ArbolBST arbol;
     private Random random;
 
     public Juego() {
-        this.arbolGemmas = new ArbolBST();
+        this.arbol = new ArbolBST();
         this.random = new Random();
     }
 
@@ -124,7 +124,7 @@ public class Juego {
 
                 case 1: // Inventario
                     mostrarSeccion("INVENTARIO");
-                    arbolGemmas.inorden();
+                    arbol.inorden();
                     break;
 
                 case 0: // Salir
@@ -134,7 +134,7 @@ public class Juego {
                 default:
                     mostrarEvento("Opción inválida. Intente de nuevo");
             }
-            if (arbolGemmas.minimo() == null && cont > 7) {
+            if (arbol.minimo() == null && cont > 7) {
                 jugando = false;
             }
 
@@ -142,8 +142,8 @@ public class Juego {
 
         mostrarTitulo("FIN DE LA AVENTURA");
         System.out.println("Estado final del inventario: ");
-        if (arbolGemmas.minimo() != null) {
-            arbolGemmas.inorden();
+        if (arbol.minimo() != null) {
+            arbol.inorden();
         } else {
             System.out.println("Te has quedado sin gemas");
         }
@@ -179,13 +179,14 @@ public class Juego {
                 case 2: 
                     int poderJefe = random.nextInt(100) + 1;
                     System.out.println("El jefe pide la gema con poder: " + poderJefe);
-                    arbolGemmas.inorden();
-                    //while(arbolGemmas.getRaiz() != null){
-                    int poderJugador = arbolGemmas.getRaiz().getPoder();
-                    jefePideGema(poderJefe, poderJugador);
-                    //}
+                    arbol.inorden();
+                    if(arbol.getRaiz() != null){
+                        int poderJugador = arbol.getRaiz().getPoder();
+                        jefePideGema(poderJefe, poderJugador);
+                    }else{
+                         System.out.println("No tienes gemas todavia. Recoge una antes de enfrentar al jefe");
+                    }
                     break;
-                    
                 case 3: 
                     abrirCofreMenorPoder();
                     break;
@@ -197,23 +198,23 @@ public class Juego {
                     break;
                 case 6:
                     System.out.println("Inventario: ");
-                    arbolGemmas.inorden();
+                    arbol.inorden();
                     break;
                 case 0: 
                     continuar = false;
                     break;
                 default: 
-                    mostrarEvento("Opcion inválida.");
+                    mostrarEvento("Opcion inválida");
                     break;
             }
-            if (arbolGemmas.minimo() == null && cont > 7) {
+            if (arbol.minimo() == null && cont > 7) {
                 continuar = false;
             }
         }
         mostrarTitulo("FIN DE LA AVENTURA");
         System.out.println("Estado final del inventario: ");
-        if (arbolGemmas.minimo() != null) {
-            arbolGemmas.inorden();
+        if (arbol.minimo() != null) {
+            arbol.inorden();
         } else {
             System.out.println("Te has quedado sin gemas");
         }
@@ -261,16 +262,16 @@ public class Juego {
     // =======================
     private void recolectarGema(int poder, String nombre, int x, int y) {
         mostrarArte("recolecta");
-        mostrarEvento("¡Has recogido una gema brillante!");
+        mostrarEvento("Has recogido una gema brillante!");
         mostrarEvento("Encontraste la " + nombre + " (Poder: " + poder + ")");
-        arbolGemmas.insertarGema(poder, nombre, x, y);
+        arbol.insertarGema(poder, nombre, x, y);
     }
 
     private void jefePideGema(int poderRequerido, int poderJugador) {
         mostrarArte("jefe");
         Scanner sc = new Scanner(System.in);
         mostrarEvento("Un jefe aparece y pide gema de poder " + poderRequerido);
-        Nodo gema = arbolGemmas.buscar(poderRequerido);
+        Nodo gema = arbol.buscar(poderRequerido);
         if (gema != null) {
             mostrarEvento("Tienes la gema exacta, no poierdes la gema: " + gema.getNombre());
             System.out.println("");
@@ -281,8 +282,8 @@ public class Juego {
             }
         } else {
             mostrarEvento("No tienes la gema exacta. Buscando alternativa...");
-            Nodo sucesor = arbolGemmas.sucesor(poderRequerido);
-            Nodo predecesor = arbolGemmas.predecesor(poderRequerido);
+            Nodo sucesor = arbol.sucesor(poderRequerido);
+            Nodo predecesor = arbol.predecesor(poderRequerido);
 
             if (sucesor != null && predecesor != null) {
                 int diffSucesor = sucesor.getPoder() - poderRequerido;
@@ -290,26 +291,26 @@ public class Juego {
 
                 if (diffSucesor < diffPredecesor) {
                     mostrarEvento("Entregas la gema más cercana: " + sucesor.getNombre());
-                    arbolGemmas.eliminar(sucesor.getPoder());
+                    arbol.eliminar(sucesor.getPoder());
                 } else {
                     mostrarEvento("Entregas la gema más cercana: " + predecesor.getNombre());
-                    arbolGemmas.eliminar(predecesor.getPoder());
+                    arbol.eliminar(predecesor.getPoder());
                 }
             } else if (sucesor != null) {
                 mostrarEvento("Entregas la gema más cercana: " + sucesor.getNombre());
-                arbolGemmas.eliminar(sucesor.getPoder());
+                arbol.eliminar(sucesor.getPoder());
             } else if (predecesor != null) {
                 mostrarEvento("Entregas la gema más cercana: " + predecesor.getNombre());
-                arbolGemmas.eliminar(predecesor.getPoder());
+                arbol.eliminar(predecesor.getPoder());
             } else {
                
-                Nodo intento = arbolGemmas.buscar(poderJugador);
+                /*Nodo intento = arbolGemmas.buscar(poderJugador);
                 if (intento != null) {
                     mostrarEvento("El jefe rechaza tu gema... ¡y se queda con ella de todos modos!: " + intento.getNombre());
                     arbolGemmas.eliminar(poderJugador);
                 } else {
                     mostrarEvento("El jefe rechaza tu intento, pero ni siquiera tenías esa gema...");
-                }
+                }*/
             }
         }
     }
@@ -318,10 +319,10 @@ public class Juego {
         Scanner sc = new Scanner(System.in);
         mostrarArte("cofre-cerrado");
         mostrarEvento("Un cofre aparece, requiere la gema de menor poder");
-        Nodo minimaGema = arbolGemmas.minimo();
+        Nodo minimaGema = arbol.minimo();
         if (minimaGema != null) {
             mostrarEvento("Usas " + minimaGema.getNombre() + " para abrir el cofre");
-            arbolGemmas.eliminar(minimaGema.getPoder());
+            arbol.eliminar(minimaGema.getPoder());
             mostrarArte("cofre-abierto");
             mostrarEvento("El cofre se abre y revela su secreto!");
             int rand = random.nextInt(3) + 1;
@@ -338,8 +339,8 @@ public class Juego {
                     int poderJefe = random.nextInt(100) + 1;
                     System.out.println("La gema que pide el jefe es: " + poderJefe);
                     mostrarSeccion("INVENTARIO");
-                    arbolGemmas.inorden();
-                    int poder1 = arbolGemmas.getRaiz().getPoder();
+                    arbol.inorden();
+                    int poder1 = arbol.getRaiz().getPoder();
                     jefePideGema(poderJefe, poder1);
                     break;
                 case 3:
@@ -354,10 +355,10 @@ public class Juego {
     private void abrirPortalMayorPoder() {
         mostrarArte("portal");
         mostrarEvento("Un portal mágico aparece, requiere la gema de mayor poder");
-        Nodo maximaGema = arbolGemmas.maximo();
+        Nodo maximaGema = arbol.maximo();
         if (maximaGema != null) {
             mostrarEvento("Usas " + maximaGema.getNombre() + " para activar el portal");
-            arbolGemmas.eliminar(maximaGema.getPoder());
+            arbol.eliminar(maximaGema.getPoder());
             abrirCofreMenorPoder();
         } else {
             mostrarEvento("No tienes gemas para activar el portal");
@@ -369,12 +370,12 @@ public class Juego {
         mostrarEvento("¡Trampa! Pierdes una gema aleatoria");
 
         List<Nodo> gemas = new ArrayList<>();
-        colectarGemas(arbolGemmas, gemas);
+        colectarGemas(arbol, gemas);
 
         if (!gemas.isEmpty()) {
             Nodo gemaPerdida = gemas.get(random.nextInt(gemas.size()));
             mostrarEvento("Perdiste: " + gemaPerdida.getNombre());
-            arbolGemmas.eliminar(gemaPerdida.getPoder());
+            arbol.eliminar(gemaPerdida.getPoder());
         } else {
             mostrarEvento("No tienes gemas que perder");
         }
