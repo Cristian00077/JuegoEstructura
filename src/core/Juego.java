@@ -53,8 +53,7 @@ public class Juego {
     // =======================
     //  MODO 2: Interactivo (usuario elige)
     // =======================
-    
-    public void Preguntar(){
+    public void Preguntar() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Quiere jugar con objetos aleatoriamente? (si/no): ");
         String respuesta = sc.nextLine().toLowerCase();
@@ -66,14 +65,15 @@ public class Juego {
             System.out.println("Respuesta inválida");
         }
     }
+
     public void iniciarJuegoInteractivo() {
         Scanner sc = new Scanner(System.in);
         boolean jugando = true;
 
         mostrarTitulo("INICIO DE LA AVENTURA EN EL BOSQUE");
-
+        int cont = 0;
         while (jugando) {
-            int cont = 0;
+
             cont = cont + 1;
             int opc;
             mostrarMenu();
@@ -134,7 +134,8 @@ public class Juego {
                 default:
                     mostrarEvento("Opción inválida. Intente de nuevo");
             }
-            if (arbol.minimo() == null && cont > 7) {
+            System.out.println(cont);
+            if (arbol.minimo() == null && cont > 9) {
                 jugando = false;
             }
 
@@ -149,12 +150,12 @@ public class Juego {
         }
     }
 
-    public void elegirEvento(){
+    public void elegirEvento() {
         Scanner sc = new Scanner(System.in);
         boolean continuar = true;
-        
-        while(continuar){
-            int cont = 0;
+        int cont = 0;
+        while (continuar) {
+
             cont = cont + 1;
             mostrarSeccion("ESCOGER EVENTO");
             System.out.print("Seleccione el evento: \n");
@@ -168,46 +169,47 @@ public class Juego {
 
             int opcion = sc.nextInt();
 
-            switch(opcion){
-                case 1: 
+            switch (opcion) {
+                case 1:
                     int poder = random.nextInt(100) + 1;
-                        String nombre = "Gema " + poder;
-                        int x = random.nextInt(20);
-                        int y = random.nextInt(20);
-                        recolectarGema(poder, nombre, x, y);
-                        break;
-                case 2: 
+                    String nombre = "Gema " + poder;
+                    int x = random.nextInt(20);
+                    int y = random.nextInt(20);
+                    recolectarGema(poder, nombre, x, y);
+                    break;
+                case 2:
                     int poderJefe = random.nextInt(100) + 1;
                     System.out.println("El jefe pide la gema con poder: " + poderJefe);
                     arbol.inorden();
-                    if(arbol.getRaiz() != null){
+                    if (arbol.getRaiz() != null) {
                         int poderJugador = arbol.getRaiz().getPoder();
                         jefePideGema(poderJefe, poderJugador);
-                    }else{
-                         System.out.println("No tienes gemas todavia. Recoge una antes de enfrentar al jefe");
+                    } else {
+                        System.out.println("No tienes gemas todavia. Recoge una antes de enfrentar al jefe");
                     }
                     break;
-                case 3: 
+                case 3:
                     abrirCofreMenorPoder();
                     break;
                 case 4:
                     abrirPortalMayorPoder();
                     break;
-                case 5: 
+                case 5:
                     caerEnTrampa();
                     break;
                 case 6:
                     System.out.println("Inventario: ");
                     arbol.inorden();
                     break;
-                case 0: 
+                case 0:
                     continuar = false;
                     break;
-                default: 
+                default:
                     mostrarEvento("Opcion inválida");
                     break;
             }
-            if (arbol.minimo() == null && cont > 7) {
+            System.out.println(cont);
+            if (arbol.minimo() == null && cont > 9) {
                 continuar = false;
             }
         }
@@ -219,7 +221,7 @@ public class Juego {
             System.out.println("Te has quedado sin gemas");
         }
     }
-    
+
     // =======================
     //  Decoradores ASCII
     // =======================
@@ -303,14 +305,14 @@ public class Juego {
                 mostrarEvento("Entregas la gema más cercana: " + predecesor.getNombre());
                 arbol.eliminar(predecesor.getPoder());
             } else {
-               
-                /*Nodo intento = arbolGemmas.buscar(poderJugador);
+
+                Nodo intento = arbol.buscar(poderJugador);
                 if (intento != null) {
                     mostrarEvento("El jefe rechaza tu gema... ¡y se queda con ella de todos modos!: " + intento.getNombre());
-                    arbolGemmas.eliminar(poderJugador);
+                    arbol.eliminar(poderJugador);
                 } else {
                     mostrarEvento("El jefe rechaza tu intento, pero ni siquiera tenías esa gema...");
-                }*/
+                }
             }
         }
     }
@@ -340,8 +342,12 @@ public class Juego {
                     System.out.println("La gema que pide el jefe es: " + poderJefe);
                     mostrarSeccion("INVENTARIO");
                     arbol.inorden();
-                    int poder1 = arbol.getRaiz().getPoder();
-                    jefePideGema(poderJefe, poder1);
+                    if (arbol.getRaiz() != null) {
+                        int poder1 = arbol.getRaiz().getPoder();
+                        jefePideGema(poderJefe, poder1);
+                    } else {
+                        System.out.println("No tienes gemas todavia");
+                    }
                     break;
                 case 3:
                     caerEnTrampa();
@@ -462,8 +468,8 @@ public class Juego {
                 break;
             case "recolecta":
                 System.out.println(
-                          "     ***       \n"
-                        + "      *         \n"        
+                        "     ***       \n"
+                        + "      *         \n"
                         + "     \\O/        \n"
                         + "      |         \n"
                         + "     / \\        \n"

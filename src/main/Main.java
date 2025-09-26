@@ -12,6 +12,10 @@ class Main {
         Scanner leer = new Scanner(System.in);
         int n = 0;
         while (n != 3) {
+            System.out.println("\n");
+            System.out.println("--------------------------");
+            System.out.println("");
+            System.out.println("");
             System.out.println("\n+----------------------+");
             System.out.println("|   MENU PRINCIPAL     |");
             System.out.println("+----------------------+");
